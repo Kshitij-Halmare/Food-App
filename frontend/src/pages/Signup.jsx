@@ -11,7 +11,7 @@ export default function Signup() {
     const navigate = useNavigate();
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-    const [profileImage, setProfileImage] = useState(null);
+    const [profileImage, setProfileImage] = useState(signup);
 
     const [data, setData] = useState({
         firstName: "",
@@ -22,26 +22,22 @@ export default function Signup() {
         image: ""
     });
 
-    // Toggle visibility for password
     const handlePasswordToggle = () => {
         setPasswordVisible(prev => !prev);
     };
 
-    // Toggle visibility for confirm password
     const handleConfirmPasswordToggle = () => {
         setConfirmPasswordVisible(prev => !prev);
     };
 
-    // Handle image upload
     const handleTheProfileImage = async (e) => {
-        const file = e.target.files[0]; // Correct file access
+        const file = e.target.files[0];
         if (file) {
-            const data = await ImageToBeUploaded(file); // Upload image and get Base64 data
-            setProfileImage(data); // Store uploaded image in state
-            // console.log("Uploaded image data:", data);
+            const data = await ImageToBeUploaded(file);
+            setProfileImage(data);
             setData((prev) => ({
-                ...prev,             // Spread previous state
-                image: data          // Correctly add the image field
+                ...prev,
+                image: profileImage
             }));
         }
     };
@@ -54,39 +50,52 @@ export default function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(import.meta.env.VITE_SERVER_DOMAIN);
+        
         const { firstName, email, password, confirmPassword } = data;
-        console.log(data);
+    
+        // Check for all required fields
         if (firstName && email && password && confirmPassword) {
+            // Ensure the password meets minimum length and matches the confirm password
             if (password.length < 8 || confirmPassword.length < 8) {
-                toast("Minimum Length of password should be 8");
+                toast("Minimum length of password should be 8 characters.");
+            } else if (password !== confirmPassword) {
+                toast("Passwords do not match.");
             } else {
-                if (password === confirmPassword) {
-                    const fetchData = await fetch(`${import.meta.env.VITE_SERVER_DOMAIN}/signup`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(data)
-                        }
-                    );
-                    console.log(fetchData);
+                try {
+                    // Send user data to server for signup
+                    const fetchData = await fetch(`${import.meta.env.VITE_SERVER_DOMAIN}/signup`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),  // Send the user data
+                    });
+    
+                    // Get the response data from the server
                     const dataRes = await fetchData.json();
-                    console.log(dataRes);
-                    // alert();
+                    
+                    // Show a toast message with the server response
                     toast(dataRes.message);
-                    if (dataRes.alert) {
-                        navigate("/login");
+                    
+                    // If signup is successful, get the token and store it
+                    if (dataRes.token) {
+                        localStorage.setItem("token", dataRes.token);
+                        console.log("token.set");  // Store the JWT token in localStorage
+                        navigate("/login");  // Redirect to login page after successful signup
                     }
-                } else {
-                    toast("Passwords do not match");
+                } catch (error) {
+                    // Catch any errors that occur during the signup process
+                    console.error("Signup error", error);
+                    toast("Signup error, please try again.");
                 }
             }
         } else {
-                toast("Please fill out all required fields");
+            // Show a toast if any required fields are missing
+            
+            toast("Please fill out all required fields.");
         }
     };
+    
 
     return (
         <div className="py-2 md:pt-4">
@@ -102,8 +111,6 @@ export default function Signup() {
                         <input type="file" id="profileImage" accept="image/*" className="hidden" onChange={handleTheProfileImage} />
                     </label>
                 </div>
-
-                {/* Signup Form */}
                 <form className="w-full py-3" onSubmit={handleSubmit}>
                     <label htmlFor="firstName">First Name</label>
                     <input
