@@ -16,8 +16,8 @@ export default function Login() {
     password: "",
   });
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user);
-  console.log(userData);
+  const mode = useSelector((state) => state.theme.darkMode); // Get dark mode state from Redux
+  console.log(mode);
 
   const handlePasswordToggle = () => {
     setPasswordVisible((prev) => !prev);
@@ -52,8 +52,8 @@ export default function Login() {
           toast.success("You logged in successfully!");
 
           // Store token and user data in localStorage or Redux
-          localStorage.setItem("token", dataRes.token);  // Save JWT in localStorage
-          
+          localStorage.setItem("token", dataRes.token); // Save JWT in localStorage
+
           // Dispatch Redux actions
           dispatch(login(dataRes.data)); // Pass the user data directly
           dispatch(setUserImage(dataRes.data.image));
@@ -76,7 +76,7 @@ export default function Login() {
 
   return (
     <div className="py-2 md:pt-4">
-      <div className="shadow drop-shadow-md flex p-4 flex-col w-full max-w-sm bg-white m-auto rounded-2xl">
+      <div className={`shadow drop-shadow-md flex p-4 flex-col w-full max-w-sm ${mode ? "bg-black text-white" : "bg-white"} m-auto rounded-2xl`}>
         <div className="w-full">
           <img
             src={signup}
@@ -90,18 +90,18 @@ export default function Login() {
             type="email"
             id="email"
             name="email"
-            className="rounded-md focus-within:outline-orange-200 mb-2 mt-1 w-full bg-slate-300 px-2 py-1 border-none"
+            className={`rounded-md focus-within:outline-orange-200 mb-2 mt-1 w-full ${mode ? "bg-slate-800 text-white" : "bg-slate-300"} px-2 py-1 border-none`}
             value={data.email}
             onChange={handleChange}
           />
 
           <label htmlFor="password">Password</label>
-          <div className="flex px-2 mb-3 mt-1 bg-slate-300 rounded-md focus-within:outline focus-within:outline-orange-200">
+          <div className={`flex px-2 mb-3 mt-1 ${mode ? "bg-slate-800 text-white" : "bg-slate-300"} rounded-md focus-within:outline focus-within:outline-orange-200`}>
             <input
               type={passwordVisible ? "text" : "password"}
               id="password"
               name="password"
-              className="outline-none mb-2 mt-1 w-full bg-slate-300 border-none"
+              className="outline-none mb-2 mt-1 w-full bg-transparent border-none"
               value={data.password}
               onChange={handleChange}
             />

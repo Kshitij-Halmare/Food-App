@@ -1,51 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import logo from "../assets/download.jpg";
 import HomeCard from "../component/HomeCard";
 import { useSelector } from "react-redux";
 import CardFeatures from "../component/CardFeatures";
-import FilterProduct from "../component/FilterProduct";
 import AllProduct from "../component/Allproduct";
 
 export default function Home() {
-    const ProductData = useSelector((state) => state.product);
-    const HomeProductCartList = ProductData.slice(0, 4);
-    const ProductDataListVegetable = ProductData.filter(el => el.category === "Vegetable");
-    console.log(ProductDataListVegetable);      
-
+    const ProductData = useSelector((state) => state.product.products); // Corrected to access the 'products' array
+    const HomeProductCartList = ProductData.slice(0, 4); // Slicing the 'products' array
+    const ProductDataListVegetable = ProductData.filter((el) => el.category === "Vegetable");
+    const mode = useSelector((state) => state.theme.darkMode);
     const loadingArray = new Array(4).fill(null); // Placeholder array
-    const categoryList = [...new Set(ProductData.map(el => el.category))]; // Get unique categories
-    console.log(categoryList);
+    const categoryList = [...new Set(ProductData.map((el) => el.category))]; // Get unique categories
 
     return (
-        <div className="ml-4">
-            {/* Banner Section */}
-            <div className="flex flex-col md:flex-row gap-4 py-4 px-2">
-                <div className="w-full md:w-1/2">
+        <div className={`px-4 py-6 ${mode ? "bg-gray-950 text-white" : "bg-200-300 text-black shadow-lg"} transition-colors duration-300`}>
+            <div className="flex flex-col md:flex-row gap-8 py-6 px-2 md:px-10">
+                {/* Left Section: Intro and CTA */}
+                <div className="w-full md:w-1/2 mt-20">
                     <div className="flex gap-2 items-center">
-                        <span className="bg-slate-400 rounded-lg py-1 px-2">Bike Delivery</span>
+                        <span className="bg-slate-400 rounded-lg py-1 px-3 text-sm font-semibold text-white">
+                            Bike Delivery
+                        </span>
                         <img src={logo} className="h-10" alt="Delivery Logo" />
                     </div>
                     <div className="py-4">
-                        <h1 className="text-4xl md:text-7xl font-bold">
-                            The Fastest Delivery to <span className="text-red-600">Your Home</span>
+                        <h1 className={`text-4xl md:text-6xl font-bold leading-tight ${mode ? "text-white" : "text-black"}`}>
+                            The Fastest Delivery to{" "}
+                            <span className="text-red-600">Your Home</span>
                         </h1>
-                        <p className="py-4 text-base">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. In molestiae at ut! Ratione, eum
-                            aperiam perferendis doloremque recusandae blanditiis quam quaerat.
+                        <p className={`py-4 text-lg ${mode ? "text-slate-300" : "text-gray-600"}`}>
+                            Experience swift delivery services for all your needs. Quality products at your doorstep,
+                            at the speed of light!
                         </p>
-                        <button className="text-bold shadow-md shadow-black bg-red-500 text-slate-100 px-3 py-1 rounded-md">
+                        <button className="bg-red-500 text-white px-5 py-3 rounded-md shadow-md hover:bg-red-600 transition duration-200">
                             Order Now
                         </button>
                     </div>
                 </div>
 
                 {/* Right Section: Product Cards */}
-                <div className="w-full md:w-1/2 mt-14 flex flex-wrap gap-4 justify-center items-stretch">
+                <div className="w-full md:w-1/2 flex flex-wrap gap-6 justify-center">
                     {HomeProductCartList.length > 0 ? (
-                        HomeProductCartList.map(el => (
+                        HomeProductCartList.map((el) => (
                             <HomeCard
-                                key={el._id}  // Pass the id
-                                id={el._id}  // Make sure to pass the id prop
+                                key={el._id}
+                                id={el._id}
                                 name={el.name}
                                 image={el.image}
                                 price={el.price}
@@ -53,22 +53,22 @@ export default function Home() {
                             />
                         ))
                     ) : (
-                        loadingArray.map((_, index) => (
-                            <HomeCard key={index} />
-                        ))
+                        loadingArray.map((_, index) => <HomeCard key={index} />)
                     )}
                 </div>
             </div>
 
             {/* Fresh Vegetables Section */}
-            <div>
-                <h2 className="font-bold text-2xl text-slate-800">Fresh Vegetables</h2>
-                <div className="mt-4 flex flex-wrap md:justify-evenly md:space-y-4 justify-center gap-4">
+            <div className="mt-10">
+                <h2 className={`font-bold text-2xl ${mode ? "text-white" : "text-slate-800"} mb-6 text-center md:text-left`}>
+                    Fresh Vegetables
+                </h2>
+                <div className="flex flex-wrap justify-center md:justify-evenly gap-6 ">
                     {ProductDataListVegetable.length > 0 ? (
-                        ProductDataListVegetable.map(el => (
+                        ProductDataListVegetable.map((el) => (
                             <CardFeatures
-                                key={el._id}  // Pass the id
-                                id={el._id}  // Make sure to pass the id prop
+                                key={el._id}
+                                id={el._id}
                                 name={el.name}
                                 image={el.image}
                                 price={el.price}
@@ -76,13 +76,18 @@ export default function Home() {
                             />
                         ))
                     ) : (
-                        loadingArray.map((_, index) => (
-                            <CardFeatures key={index} />
-                        ))
+                        loadingArray.map((_, index) => <CardFeatures key={index} />)
                     )}
                 </div>
             </div>
-            <AllProduct/>
+
+            {/* All Products Section */}
+            <div className="mt-10">
+                <h2 className={`font-bold text-2xl ${mode ? "text-white" : "text-slate-800"} mb-5`}>
+                    Filter Products by Category
+                </h2>
+                <AllProduct />
+            </div>
         </div>
     );
 }
