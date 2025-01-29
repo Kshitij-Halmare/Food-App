@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AllProduct from "../component/Allproduct";
 import { addCartItems } from "../redux/productSlice";
-
+import {useNavigate} from "react-router-dom"
 export default function Menu() {
     const { id } = useParams(); // Get the id from the URL
     const ProductData = useSelector((state) => state.product.products); // Fetch product data from Redux
@@ -11,7 +11,7 @@ export default function Menu() {
     const mode = useSelector((state) => state.theme.darkMode);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
-
+    const navigate=useNavigate();
     const handleAddToCart = () => {
         dispatch(addCartItems({
             id: id,
@@ -21,7 +21,18 @@ export default function Menu() {
             image: image,
         }));
     };
-
+    const handleAddToCartNavigate = () => {
+        console.log("yes");
+        dispatch(addCartItems({
+            id: id,
+            name: name,
+            price: price,
+            category: category,
+            image: image,
+        }));
+        navigate("/cart");
+        console.log("yes");
+    };
     // Use useEffect to update the 'all' state when 'id' changes
     useEffect(() => {
         if (id === ":all") {
@@ -65,8 +76,8 @@ export default function Menu() {
                     <p className="text-red-500 font-semibold mt-2">Rs {price}/-</p>
                     <p className="mt-4">{description}</p>
                     <div className="flex gap-4 mt-6">
-                        <button className="bg-yellow-400 hover:bg-yellow-500 py-2 px-4 rounded-md transition duration-200">Buy</button>
-                        <button className="bg-yellow-400 hover:bg-yellow-500 py-2 px-4 rounded-md transition duration-200">Add_to_Cart</button>
+                        <button onClick={handleAddToCartNavigate} className="bg-yellow-400 hover:bg-yellow-500 py-2 px-4 rounded-md transition duration-200">Buy</button>
+                        <button onClick={handleAddToCart} className="bg-yellow-400 hover:bg-yellow-500 py-2 px-4 rounded-md transition duration-200">Add_to_Cart</button>
                     </div>
                 </div>
             </div>

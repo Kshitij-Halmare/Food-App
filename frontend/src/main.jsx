@@ -7,6 +7,8 @@ import Menu from './pages/Menu.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx';
 import Cart from './pages/Cart.jsx';
+import SuccessPage from "./pages/SuccessPage.jsx"
+import CancelPage from"./pages/CancelPage.jsx"
 import NewProduct from './pages/NewProduct..jsx'
 import {
   createBrowserRouter,
@@ -32,6 +34,8 @@ const router = createBrowserRouter(
         <Route path='newProduct' element={<NewProduct/>}/>
         <Route path="signup" element={<Signup/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/success_page" element={<SuccessPage/>}/>
+        <Route path="/cancel_page" element={<CancelPage/>}/>
       </Route>
     </>
   )

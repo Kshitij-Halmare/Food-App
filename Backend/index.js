@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import Stripe from "stripe";
 dotenv.config(); // Load environment variables from .env
 
 // Create express app
@@ -48,7 +48,51 @@ const userSchema = new mongoose.Schema({
 
 const userModel = mongoose.model("user", userSchema);
 
-// Route for user signup with JWT
+const stripe=new Stripe(process.env.Stripe_Secret_Key)
+app.post("/checkout-payment", async (req, res) => {
+  console.log(req.body.cartItems);
+  try {
+    // Map cart items to Stripe line items
+    const line_items = req.body.cartItems.map((item) => ({
+      price_data: {
+        currency: "inr",
+        product_data: {
+          name: item.name,
+          images:  [], // Ensure valid URL or omit images
+        },
+        unit_amount: item.price * 100, // Convert to smallest currency unit (e.g., paise for INR)
+      },
+      adjustable_quantity: {
+        enabled: true,
+        minimum: 1,
+      },
+      quantity: item.qty,
+    }));
+
+    // Prepare checkout session parameters
+    const params = {
+      payment_method_types: ["card"],
+      mode: "payment",
+      billing_address_collection: "auto",
+      line_items,
+      success_url: `${process.env.Frontend_Url}/success_page`,
+      cancel_url: `${process.env.Frontend_Url}/cancel_page`,
+    };
+
+    // Create a new checkout session
+    const session = await stripe.checkout.sessions.create(params);
+
+    // Send session ID back to frontend
+    res.status(200).json({ id: session.id });
+  } catch (err) {
+    console.error("Error creating Stripe session:", err.message);
+    res.status(500).json({
+      message: "An error occurred while creating the Stripe session",
+      error: err.message,
+    });
+  }
+});
+
 app.post("/signup", async (req, res) => {
   const { email, password, confirmPassword, ...otherDetails } = req.body;
 
