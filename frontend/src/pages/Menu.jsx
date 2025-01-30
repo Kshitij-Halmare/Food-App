@@ -22,7 +22,7 @@ export default function Menu() {
         }));
     };
     const handleAddToCartNavigate = () => {
-        console.log("yes");
+        // console.log("yes");
         dispatch(addCartItems({
             id: id,
             name: name,
@@ -31,7 +31,7 @@ export default function Menu() {
             image: image,
         }));
         navigate("/cart");
-        console.log("yes");
+        // console.log("yes");
     };
     // Use useEffect to update the 'all' state when 'id' changes
     useEffect(() => {

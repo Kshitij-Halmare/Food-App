@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 export default function CardFeatures({ id, name, image, price, category }) {
     const mode=useSelector((state)=>state.theme).darkMode;
     const dispatch = useDispatch();
-    console.log(image);
+    // console.log(image);
     const handleAddToCart = () => {
         dispatch(addCartItems({
             id: id,

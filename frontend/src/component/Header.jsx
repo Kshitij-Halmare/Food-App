@@ -1,22 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from "../assets/logo.png"; // Default logo
 import { Link, useNavigate } from "react-router-dom";
+import {jwtDecode} from 'jwt-decode'; // Fixed import
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector, useDispatch } from "react-redux";
 import { IoPerson } from "react-icons/io5";
 import { logout } from "../redux/useSlice"; // Redux logout action
 import { toast } from "react-hot-toast"; // For toast notifications
 import { MdOutlineLightMode, MdLightMode } from "react-icons/md"; // Import both icons
+import { login, setUserImage } from "../redux/useSlice";
+
 
 export default function Header() {
   const userData = useSelector((state) => state.user);
+  console.log(userData);
   const items = useSelector((state) => state.product.cartItem); // Correct cart item selector
   const countofItems = items.length;
   const { darkMode } = useSelector((state) => state.theme); // Get darkMode state from redux
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [loggedIn, setLoggedIn] = useState();
   const email = import.meta.env.VITE_ADMIN_EMAIL;
   const menuRef = useRef(null);
 
@@ -47,9 +51,15 @@ export default function Header() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setLoggedIn(!!token);
+    console.log(token);
+    // if(token){
+    //   const decoded = jwtDecode(token);
+    //   console.log(decoded);
+    //   dispatch(login(decoded));
+    // }
+    token!=null?setLoggedIn(true):setLoggedIn(false);
   }, []);
-
+  console.log(loggedIn);
   return (
     <header className={`fixed shadow-md w-full h-16 px-2 md:px-4 z-20 transition-colors ${darkMode ? 'bg-black text-white drop-shadow-md shadow-white' : 'bg-white text-black shadow-slate-300'}`}>
       <div className={`flex items-center h-full justify-between ${darkMode ? "text-white" : "text-black"}`}>
@@ -116,7 +126,7 @@ export default function Header() {
                     New Product
                   </Link>
                 )}
-                {loggedIn ? (
+                {loggedIn || !userData ? (
                   <p
                     className="text-slate-400 dark:text-gray-300 whitespace-nowrap cursor-pointer hover:bg-gray-700 hover:text-white p-1 rounded-md"
                     onClick={handleLogout}

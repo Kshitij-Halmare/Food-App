@@ -17,7 +17,7 @@ export default function Login() {
   });
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.theme.darkMode); // Get dark mode state from Redux
-  console.log(mode);
+  // console.log(mode);
 
   const handlePasswordToggle = () => {
     setPasswordVisible((prev) => !prev);
