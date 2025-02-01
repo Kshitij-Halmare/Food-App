@@ -124,7 +124,7 @@ export default function Header() {
                     className="text-slate-400 dark:text-gray-300 whitespace-nowrap cursor-pointer hover:bg-gray-700 hover:text-white p-1 rounded-md"
                   >
                     New Product
-                  </Link>
+                  </Link> 
                 )}
                 {loggedIn || !userData ? (
                   <p

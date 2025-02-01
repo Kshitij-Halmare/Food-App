@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import contactImage from "../assets/istockphoto-1316145932-612x612.jpg";
+import contactImage from "../assets/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa"; // Importing React Icons
 
 export default function Contact() {
