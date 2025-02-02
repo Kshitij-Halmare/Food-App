@@ -4,6 +4,7 @@ import HomeCard from "../component/HomeCard";
 import { useSelector } from "react-redux";
 import CardFeatures from "../component/CardFeatures";
 import AllProduct from "../component/Allproduct";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function Home() {
     const ProductData = useSelector((state) => state.product.products); // Corrected to access the 'products' array
@@ -12,6 +13,12 @@ export default function Home() {
     const mode = useSelector((state) => state.theme.darkMode);
     const loadingArray = new Array(4).fill(null); // Placeholder array
     const categoryList = [...new Set(ProductData.map((el) => el.category))]; // Get unique categories
+
+    const navigate = useNavigate(); // Initialize the useNavigate hook
+
+    const handleOrderNowClick = () => {
+        navigate("/cart"); // Navigate to the cart page when clicked
+    };
 
     return (
         <div className={`px-4 py-6 ${mode ? "bg-gray-950 text-white" : "bg-200-300 text-black shadow-lg"} transition-colors duration-300`}>
@@ -33,7 +40,10 @@ export default function Home() {
                             Experience swift delivery services for all your needs. Quality products at your doorstep,
                             at the speed of light!
                         </p>
-                        <button className="bg-red-500 text-white px-5 py-3 rounded-md shadow-md hover:bg-red-600 transition duration-200">
+                        <button 
+                            className="bg-red-500 text-white px-5 py-3 rounded-md shadow-md hover:bg-red-600 transition duration-200"
+                            onClick={handleOrderNowClick} // Attach the click handler
+                        >
                             Order Now
                         </button>
                     </div>
