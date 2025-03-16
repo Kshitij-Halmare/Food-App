@@ -21,7 +21,8 @@ Welcome to Flavor Fusion, the ultimate food ordering experience! Whether you're 
 
 ## Screenshots
 
-![App Screenshot](Screenshot_16-3-2025_172317_food-app-1-p51c.onrender.com.jpeg)
+![Home Page Screenshot](Screenshot_16-3-2025_172317_food-app-1-p51c.onrender.com.jpeg)
+![Payment Screenshot](Screenshot_16-3-2025_172741_food-app-1-p51c.onrender.com.jpeg)
 
 
 ## Tech Stack
