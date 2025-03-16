@@ -21,7 +21,7 @@ Welcome to Flavor Fusion, the ultimate food ordering experience! Whether you're 
 
 ## Screenshots
 
-![App Screenshot]([[https://via.placeholder.com/468x300?text=App+Screenshot+Here](https://github.com/Kshitij-Halmare/Food-App/blob/main/Screenshot_16-3-2025_172317_food-app-1-p51c.onrender.com.jpeg)](https://github.com/Kshitij-Halmare/Food-App/blob/main/Screenshot_16-3-2025_172317_food-app-1-p51c.onrender.com.jpeg))
+![App Screenshot](Screenshot_16-3-2025_172317_food-app-1-p51c.onrender.com.jpeg)
 
 
 ## Tech Stack
